@@ -1,0 +1,72 @@
+
+<html>
+  <head>
+    <style>
+      .user-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 500px;
+      margin: 30px auto;
+    }
+
+    .user-card {
+      background-color: #ffffff;
+      padding: 15px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-card h3 {
+      font-size: 18px;
+      color: #333;
+    }
+
+    .user-card button {
+      padding: 8px 16px;
+      background-color: #1877f2;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .user-card button:hover {
+      background-color: #145ecc;
+    }
+    .users{
+      display:flex;
+      gap:18px;
+    }
+    .user_img{
+      height:44px;
+      width:44px;
+      border-radius:100%;
+    }
+    </style>
+    <body>
+    <div class="user-list">
+      {% csrf_token %}
+      {% for user in users %}
+    <div class="user-card">
+    <div class="users">
+      {% if user.image %}
+      <img class="user_img" src="{{user.image.url}}" alt="Profile Picture" />
+      {% endif %}
+      <h3>{{ user.name }}</h3>
+    </div>
+      {% if is_following %}
+      <a href={% url 'unfollow' user.id %}><button> unfollow </button></a>
+      {% endif %}
+    </div>
+      {% empty %}
+    <p>No users found.</p>
+      {% endfor %}
+    </div>
+  </body>
+  </html>

@@ -1,0 +1,141 @@
+<html>
+  <head>
+  <style>
+        * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    a{
+      text-decoration:none;
+    }
+
+    body {
+      background-color: #f0f2f5;
+    }
+    .navbar {
+      background-color: #ffffff;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar h1 {
+      font-size: 26px;
+      color: #1877f2;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    .navbar li {
+      cursor: pointer;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .navbar ul li a:hover {
+      color: #1877f2;
+    }
+
+  a{
+  text-decoration:none;
+  }
+  .user-list {
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   max-width: 500px;
+   margin: 30px auto;
+   }
+
+  .user-card {
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .user-card h3 {
+    font-size: 18px;
+    color: #333;
+  }
+
+  .user-card button {
+    padding: 8px 16px;
+    background-color: #1877f2;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .user-card button:hover {
+    background-color: #145ecc;
+  }
+  .users{
+    display:flex;
+    gap:18px;
+  }
+  .user_img{
+    height:44px;
+    width:44px;
+    border-radius:100%;
+  }
+
+  </style>
+  <body>
+
+    <div class="navbar">
+    <a href="{% url 'home' %}"><h1>Connectify</h1></a>
+    <ul>
+      {% csrf_token %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'people' %}">People</a></li>
+      <li><a href="{% url 'notifications'%}">Notifications</a></li>
+      <li><a href="{% url 'user_profile' %}">{{ name }}</a></li>
+      <li><a href="{% url 'post' %}">Post</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </div>
+  <div class="user-list">
+  {% csrf_token %}
+  {% for user in users %}
+  <div class="user-card">
+ <div class="users">
+  {% if user.image %}
+  <img class="user_img" src="{{user.image.url}}" alt="Profile Picture" />
+    {% endif %}
+    <a href={% url 'another_user' user.id %}><h3>{{ user.name }}</h3></a> 
+ </div>
+      
+    <a href="{% url 'follow_req' user.id %}">
+    <button>Follow</button>
+    </a>
+    </div>
+  {% empty %}
+    <p>No users found.</p>
+  {% endfor %}
+</div>
+
+  </body>
+  </html>

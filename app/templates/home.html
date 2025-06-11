@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Connectify</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    a{
+      text-decoration:none;
+    }
+
+    body {
+      background-color: #f0f2f5;
+    }
+    .navbar {
+      background-color: #ffffff;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar h1 {
+      font-size: 26px;
+      color: #1877f2;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 25px;
+    }
+
+    .navbar li {
+      cursor: pointer;
+    }
+
+    .navbar ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .navbar ul li a:hover {
+      color: #1877f2;
+    }
+
+    
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 30px auto;
+      gap: 20px;
+      padding: 0 15px;
+    }
+
+    .left-panel {
+      width: 30%;
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .left-panel img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .left-panel h3 {
+      margin-bottom: 5px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+    }
+
+    .stats div {
+      text-align: center;
+    }
+
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .post {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .post:hover {
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+
+    .post-header img {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
+    }
+
+    .post p {
+      margin: 10px 0;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .post img.post-image {
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    .buttons {
+      margin-top: 12px;
+      display: flex;
+      gap: 15px;
+    }
+
+    .buttons button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      background-color: #e4e6eb;
+      color: #050505;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .buttons button:hover {
+      background-color: #d8dadf;
+    }
+
+    
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+
+      .left-panel,
+      .right-panel {
+        width: 100%;
+      }
+    }
+
+  .post-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+
+  </style>
+  </head>
+  <body>
+
+  <div class="navbar">
+    <a href="{% url 'home' %}"><h1>Connectify</h1></a>
+    <ul>
+      {% csrf_token %}
+      <li><a href="{% url 'home' %}">Home</a></li>
+      <li><a href="{% url 'people' %}">People</a></li>
+      <li><a href="{% url 'notifications'%}">Notifications</a></li>
+      <li><a href="{% url 'user_profile' %}">{{ name }}</a></li>
+      <li><a href="{% url 'post' %}">Post</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </div>
+
+  <div class="container">
+  <div class="right-panel">
+      {% for post in posts %}
+  <div class="post">
+  <div class="post-header">
+      {% if post.webuserId.image %}
+      <img class="user_img" src="{{post.webuserId.image.url}}" alt="Profile Picture" />
+      {% endif %}
+      <a href={% url 'another_user' post.webuserId.id %}><strong>{{ post.webuserId.name }}</strong></a>
+  </div>
+      <p>{{ post.desc }}</p>
+      {% if post.post_image%}
+      <img src="{{post.post_image.url}}" alt="Post Image" class="post-image" />
+      {% endif %}
+  <div class="buttons">
+      <a href="{% url 'hitted_like' post.id %}">
+      <button>{{ post.likes }} Like{{ post.likes|pluralize }}</button>
+      </a>
+      <a href="{% url 'comment_box' post.id %}">
+      <button>Comment</button>
+      </a>
+  </div>
+  </div>
+      {% endfor %}
+  </div>
+  </div>
+  
+  </body>
+  </html>

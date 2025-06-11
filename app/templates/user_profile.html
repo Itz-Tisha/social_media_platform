@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Social Media Home</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    a{
+      text-decoration:none;
+    }
+    body {
+      background-color: #f0f2f5;
+    }
+    .navbar {
+      background-color: #ffffff;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      font-size: 24px;
+      color: #1877f2;
+    }
+
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+.navbar li{
+  cursor:pointer;
+}
+    .navbar ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      cursor:pointer;
+    }
+
+    .navbar ul li a:hover {
+      color: #1877f2;
+    }
+    .container {
+      display: flex;
+      max-width: 1200px;
+      margin: 30px auto;
+      gap: 20px;
+    }
+
+    .left-panel {
+      width: 30%;
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .left-panel img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .left-panel h3 {
+      margin-bottom: 5px;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 15px;
+    }
+
+    .stats div {
+      text-align: center;
+    }
+
+    .right-panel {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .post {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .post-header img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .post img.post-image {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+
+    .buttons {
+      margin-top: 10px;
+    }
+
+    .buttons button {
+      padding: 6px 12px;
+      margin-right: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .buttons button:hover {
+      background-color: #f0f0f0;
+    }
+    .editbtn button{
+      height: 25px;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+     <a href="#"><h1>Connectify</h1></a>
+      <ul>
+        {% csrf_token%}
+      <li><a href={% url 'home' %}>Home</a></li>
+      <li><a href={% url 'people' %}>people</a></li>
+      <li><a href="{% url 'notifications'%}">Notifications</a></li>
+      <li><a href={% url 'user_profile' %}>{{name}}</a></li>
+      <li><a href={% url 'post'%}>Post</a></li>
+      <li><a href={% url 'edit_profile'%}>edit profile</a></li>
+      <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+  </div>
+
+  
+  <div class="container">
+    <div class="left-panel">
+      {% if user.image %}
+      <img src="{{user.image.url}}" alt="Profile Picture" />
+      {% endif %}
+      <h3>{{user.name}}</h3>
+  
+      <div class="stats">
+        <div>
+          <h4>{{post_count}}</h4>
+          <p>Posts</p>
+      </div>
+      <div>
+          <h4>{{user_followers}}</h4>
+          <a href={% url 'followers_list'%}><p>Followers</p></a>
+      </div>
+      <div>
+          <h4>{{user_following}}</h4>
+          <a href={% url 'following_list' %}><p>Following</p></a>
+      </div>
+      </div>
+      </div>
+
+    
+    <div class="right-panel">
+      {% if ispublic %}
+      {% for post in posts%}
+      <div class="post">
+        <div class="post-header">
+         {% if post.webuserId.image %}
+           <img src="{{post.webuserId.image.url}}" alt="User" />
+         {% endif %}
+        <strong>{{post.webuserId.name}}</strong>
+      </div>
+        <p>{{ post.desc }}</p>
+        {% if post.post_image %}
+        <img src="{{post.post_image.url}}" alt="Post Image" class="post-image" />
+        {% endif %}
+      <div class="buttons">
+            <a href="{% url 'hitted_like' post.id %}">
+      <button>{{ post.likes }} Like{{ post.likes|pluralize }}</button>
+      </a>
+          <a href={% url 'comment_box' post.id %}><button>Comment</button></a>
+          {% if user_itself %}
+          <a href={% url 'delete_post' post.id%}> <button> delete post </button></a>
+          {% endif %}
+      </div> 
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="container">
+        <p>Private Account</p>
+      </div>
+      {% endif %}
+  </div>
+
+</body>
+</html>

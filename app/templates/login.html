@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Social Media Login</title>
+  <style>
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #4a90e2, #9013fe);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+    }
+    .login-wrapper {
+      background: #fff;
+      width: 360px;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .login-wrapper h1 {
+      margin-bottom: 24px;
+      color: #4a90e2;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+    .login-wrapper p {
+      margin-bottom: 30px;
+      font-size: 14px;
+      color: #777;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      padding: 14px 16px;
+      border-radius: 8px;
+      border: 1.5px solid #ddd;
+      font-size: 16px;
+      transition: border-color 0.3s;
+    }
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+      border-color: #4a90e2;
+      outline: none;
+    }
+    button {
+      background: #4a90e2;
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 14px 0;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+    }
+    button:hover {
+      background: #357ABD;
+      box-shadow: 0 6px 20px rgba(53, 122, 189, 0.6);
+    }
+    .signup-text {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+    .signup-text a {
+      color: #9013fe;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .signup-text a:hover {
+      text-decoration: underline;
+    }
+    .message p{
+      color:red;
+    }
+  </style>
+</head>
+<body>
+<div class="login-wrapper">
+    <h1>SocialSphere</h1>
+    <p>Connect with friends and the world around you.</p>
+  <form method="POST" action="{% url 'login'%}"> 
+    {% csrf_token%}
+    {{form.name}}
+    {{form.password}}
+  <div class="message">
+    {% if form.email.errors %}
+    {% for error in form.email.errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+    {% endif %}
+  </div>
+    <button type="submit">Log In</button>
+  </form>
+
+  <div class="signup-text">
+    Don't have an account? <a href={% url 'sign'%}>Sign up</a>
+  </div>
+  </div>
+  </body>
+  </html>

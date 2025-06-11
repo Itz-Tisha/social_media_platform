@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <style>
+    .comments-section {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid #ddd;
+  }
+
+    .comments-section h4 {
+      margin-bottom: 10px;
+      font-size: 18px;
+      color: #444;
+    }
+
+    .comment {
+      background-color: #f5f6f8;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+
+    .comment-text {
+      margin: 0;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .comment-user {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #666;
+      font-style: italic;
+    }
+
+    .comment-form {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .comment-form textarea,
+    .comment-form input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+
+    .comment-form button {
+      align-self: flex-start;
+      padding: 8px 16px;
+      background-color: #1877f2;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .comment-form button:hover {
+      background-color: #155fcf;
+    }
+
+    .no-comments {
+      font-size: 14px;
+      color: #777;
+    }
+    .user{
+      display:flex;
+      gap:17px
+    }
+    .user p{
+      font-size:18px;
+    }
+    .user_img{
+      height:21px;
+      width:21px;
+      border-radius:100%;
+    }
+
+        </style>
+    </head>
+    <body>
+      
+     <div class="comments-section">
+        <h4>Comments</h4>
+          {% for cmt in all_comments %}
+     <div class="comment">
+          <p class="comment-text">🗨️ {{ cmt.comment }}</p>
+     <div class="user">
+        {% if cmt.webuser.image %}
+        <img class="user_img" src="{{cmt.webuser.image.url}}" alt="Profile Picture" />
+        {% endif %}
+        <p class="comment-user"> {{ cmt.webuser.name }}</p>
+     </div>
+     </div>
+  {% empty %}
+    <p class="no-comments">No comments yet.</p>
+  {% endfor %}
+  <form action="{% url 'comment_box' post.id %}" method="post" class="comment-form">
+    {% csrf_token %}
+    {{ form.comment }}
+    <button type="submit">Post Comment</button>
+  </form>
+</div>
+</body>
+</html>
